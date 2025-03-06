@@ -4,4 +4,4 @@ from ultralytics import YOLO
 model = YOLO("yolo11n.pt")
 
 # Fazer a detecção em uma imagem
-results = model("video.mp4", show=True)
+results = model("video_4096_2160_25fps.mp4", show=True)

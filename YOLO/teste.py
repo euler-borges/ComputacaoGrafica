@@ -2,10 +2,10 @@ from ultralytics import YOLO
 import cv2
 
 # Carregar o modelo YOLOv8 pré-treinado
-model = YOLO("yolo11n.pt")
+model = YOLO("yolo11l.pt")
 
 # Fazer a detecção em uma imagem
-results = model("image.jpg")  # Remove `show=True`
+results = model("ru1.jpeg")  # Remove `show=True`
 
 # Obter a imagem com as detecções
 for result in results:
