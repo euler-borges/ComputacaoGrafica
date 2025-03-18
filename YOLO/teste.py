@@ -1,19 +1,49 @@
 from ultralytics import YOLO
 import cv2
+import os
+import json
 
-# Carregar o modelo YOLOv8 pré-treinado
+PERSON_CLASS_ID = 0
+IMAGE_FOLDER = "fotos/"
+
+images = [f for f in os.listdir(IMAGE_FOLDER) if f.endswith((".jpeg", ".jpg", ".png"))]
+
+# Carregar o modelo YOLO11 pré-treinado
 model = YOLO("yolo11l.pt")
 
-# Fazer a detecção em uma imagem
-results = model("ru1.jpeg")  # Remove `show=True`
 
-# Obter a imagem com as detecções
-for result in results:
-    img = result.plot()  # Renderizar as caixas na imagem
+for image in images:
+    image_path = os.path.join(IMAGE_FOLDER, image)
+    results = model(image_path, verbose = False)  # Remove `show=True`
 
-# Exibir a imagem com OpenCV
-cv2.imshow("Detecção YOLO", img)
+    num_people = sum(1 for result in results for box in result.boxes if int(box.cls) == PERSON_CLASS_ID)
 
-# Aguardar uma tecla para fechar a janela
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+    print(f"Imagem: {image} - Número de pessoas detectadas: {num_people}")
+
+    tempo_estimado = num_people / 6
+
+    dados = {
+        "num_people": num_people,
+        "tempo_estimado": tempo_estimado
+    }
+
+    with open(f"JSONs/{image}.json", "w") as f:
+        json.dump(dados, f)
+
+
+
+# # Exibir a imagem com as detecções
+# for result in results:
+#     img = result.plot()
+
+# cv2.imshow("Detecção YOLO", img)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+
+
+
+
+
+
+
+
